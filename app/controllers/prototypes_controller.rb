@@ -4,7 +4,7 @@ class PrototypesController < ApplicationController
   before_action :move_to_index, only: [:edit, :update, :destroy]
   
   def index
-    @prototypes = Prototype.all.includes(:user)
+    @prototypes = Prototype.includes(:user)
   end
 
   def new
@@ -12,7 +12,7 @@ class PrototypesController < ApplicationController
   end
 
   def create
-    @prototype = Prototype.create(prototype_params)
+    @prototype = Prototype.new(prototype_params)
     if @prototype.save
       redirect_to root_path
     else
@@ -22,7 +22,7 @@ class PrototypesController < ApplicationController
 
   def show
     @comment = Comment.new
-    @comments = @prototype.comments.includes(:user)
+    @comments = @prototype.comments
   end
 
   def edit
@@ -30,7 +30,7 @@ class PrototypesController < ApplicationController
 
   def update
     if @prototype.update(prototype_params)
-      redirect_to root_path
+      redirect_to prototype_path(@prototype)
     else
       render :edit
     end
